@@ -224,7 +224,7 @@ gossipPortName: gossip
 ##
 service:
   enabled: true
-  type: ClusterIP
+  type: NodePort
   # Set the ip family policy to configure dual-stack see [Configure dual-stack](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services)
   ipFamilyPolicy: ""
   # Sets the families that should be supported and the order in which they should be applied to ClusterIP as well. Can be IPv4 and/or IPv6.
@@ -232,7 +232,7 @@ service:
   loadBalancerIP: ""
   loadBalancerClass: ""
   loadBalancerSourceRanges: []
-  port: 80
+  port: 3001
   targetPort: 3000
     # targetPort: 4181 To be used with a proxy extraContainer
   ## Service annotations. Can be templated.
@@ -375,7 +375,7 @@ persistence:
   # storageClassName: default
   accessModes:
     - ReadWriteOnce
-  size: 10Gi
+  size: 1Gi
   # annotations: {}
   finalizers:
     - kubernetes.io/pvc-protection
@@ -612,15 +612,15 @@ plugins: []
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
 ##
-datasources: {}
-#  datasources.yaml:
-#    apiVersion: 1
-#    datasources:
-#    - name: Prometheus
-#      type: prometheus
-#      url: http://prometheus-prometheus-server
-#      access: proxy
-#      isDefault: true
+datasources:
+ datasources.yaml:
+   apiVersion: 1
+   datasources:
+   - name: Prometheus
+     type: Prometheus
+     url: http://192.168.49.2:
+     access: proxy
+     isDefault: true
 #    - name: CloudWatch
 #      type: cloudwatch
 #      access: proxy
@@ -798,6 +798,9 @@ grafana.ini:
     url: https://grafana.net
   server:
     domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ .Values.ingress.hosts | first }}{{ else }}''{{ end }}"
+  smpt:
+    enabled: true
+
 ## grafana Authentication can be enabled with the following values on grafana.ini
  # server:
       # The full public facing url you use in browser, used for redirects and emails
