@@ -1,4 +1,4 @@
-// pages/_app.js
+//  pages/_app.js
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "../styles/globals.css";
