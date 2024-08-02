@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: finance
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    image: backend:latest
+    environment:
+      - DATABASE_URL=postgresql://postgres:12345@db:5432/finance
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    image: frontend:latest
+    ports:
+      - "8090:8090"  # Adjust the port if needed
+    environment:
+      - API_BASE_URL=http://backend:5000/api/stocks
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
