@@ -2,3 +2,4 @@ frontend/node_modules/
 frontend/.pnp
 frontend/.next
 frontend/README.md
+backend/myenv
