@@ -1,0 +1,86 @@
+# Default values for backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: vanshik123docker/projectbackendflask
+  pullPolicy: IfNotPresent
+  tag: "05"
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 5000
+  targetPort: 5000
+  nodePort: 30000 # You can choose a port in the range 30000-32767
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}
+  # Uncomment and adjust the following if you need to specify resource limits and requests.
+  # limits:
+  #   cpu: "100m"
+  #   memory: "128Mi"
+  # requests:
+  #   cpu: "100m"
+  #   memory: "128Mi"
+
+livenessProbe:
+  httpGet:
+    path: /metrics
+    port: 5000
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+
+readinessProbe:
+  httpGet:
+    path: /metrics
+    port: 5000
+  initialDelaySeconds: 30
+  timeoutSeconds: 5
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Additional configurations if needed
+env:
+  DATABASE_URL: "postgresql://postgres:12345@backend-db:5432/finance"
