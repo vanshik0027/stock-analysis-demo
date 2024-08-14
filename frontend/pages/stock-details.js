@@ -111,9 +111,9 @@ export default function StockDetails() {
         callbacks: {
           label: function (tooltipItem) {
             const index = tooltipItem.dataIndex;
-            const openPrice = historicalData[index].Open;
-            const highPrice = historicalData[index].High;
-            const closePrice = historicalData[index].Close;
+            const openPrice = historicalData[index].Open.toFixed(3);
+            const highPrice = historicalData[index].High.toFixed(3);
+            const closePrice = historicalData[index].Close.toFixed(3);
 
             return [
               `Open: ${openPrice}`,

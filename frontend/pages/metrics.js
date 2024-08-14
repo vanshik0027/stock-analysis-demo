@@ -1,5 +1,3 @@
-// pages/metrics.js
-
 import { useEffect, useState } from 'react';
 
 const MetricsPage = () => {

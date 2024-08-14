@@ -1,7 +1,16 @@
-// components/Navbar.js
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('isLoggedIn');
+  router.replace('/', null, { replace: true });
+
+};
+
   return (
     <nav className="bg-gray-800 p-4 text-white">
       <div className="container mx-auto flex item-center justify-between items-center">
@@ -9,10 +18,9 @@ const Navbar = () => {
           <Link href="/">Stock Market Data Analysis</Link>
         </div>
         <div className="space-x-4">
-        <Link href="/initial">About</Link>
-        <Link href="/home">Dashboard</Link>
-        
-        <Link href="/">Logout</Link>
+          <Link href="/about">About</Link>
+          <Link href="/home">Dashboard</Link>
+          <button onClick={handleLogout} className="text-white">Logout</button>
         </div>
       </div>
     </nav>
