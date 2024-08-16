@@ -23,13 +23,13 @@ ChartJS.register(
 );
 
 // Mock function to fetch historical data for a specific stock
-const fetchHistoricalData = async (symbol) => {
+const fetchHistoricalData = async (sym) => {
   // Replace with actual data fetching logic
-  const value = symbol
-  const indexdata = value.indexOf("(")
-  const newValue = value.slice(indexdata + 1, value.length - 1)
+  // const value = symbol
+  // const indexdata = value.indexOf("(")
+  // const newValue = value.slice(indexdata + 1, value.length - 1)
   // console.log(`${baseUrl}/historical/${symbol}`)
-  const response = await axios.get(`${baseUrl}/historical/${newValue}`)
+  const response = await axios.get(`${baseUrl}/historical/${sym}`)
   return response.data;
 };
 
@@ -91,9 +91,9 @@ const aggregateData = (data, period) => {
 
 export default function StockDetails() {
   const router = useRouter();
-  const { symbol } = router.query;
+  const { symbol, company } = router.query;
   const [historicalData, setHistoricalData] = useState([]);
-
+  console.log(symbol)
   useEffect(() => {
     if (symbol) {
       const loadHistoricalData = async () => {
@@ -143,7 +143,7 @@ export default function StockDetails() {
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">
-          Historical Data for {symbol}
+          Historical Data for {company} - {symbol}
         </h1>
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

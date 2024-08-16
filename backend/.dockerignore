@@ -1,0 +1,54 @@
+# Exclude Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Exclude virtual environments
+myenv/
+
+# Exclude test and coverage reports
+tests/
+coverage/
+*.cover
+*.coverage
+*.cov
+htmlcov/
+
+# Exclude Flask instance folder (if using one)
+instance/
+
+# Exclude config files for IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Exclude OS-specific files
+.DS_Store
+Thumbs.db
+
+# Exclude environment variable files
+.env
+.env.local
+.env.*.local
+
+# Exclude logs and temporary files
+*.log
+*.tmp
+*.pid
+*.swp
+
+# Exclude build-related directories and files
+build/
+dist/
+*.egg-info/
+.eggs/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Exclude Docker-related files (optional)
+docker-compose.yml
+Dockerfile*
+.dockerignore
+

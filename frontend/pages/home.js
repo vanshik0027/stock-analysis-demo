@@ -60,12 +60,26 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-const getData= async() => {
-  const data = await axios.get(baseUrl+"/top-gainers-losers")
-        setTopGainers(data.data.top_gainers);
-        setTopLosers(data.data.bottom_losers);
-}
-
+  const getData = async () => {
+    try {
+      const response = await axios.get(baseUrl + "/top-gainers-losers");
+      let data = response.data;
+  
+      if (typeof data !== 'string') {
+        data = JSON.stringify(data);
+      }
+  
+      data = data.replace(/Infinity/g, '0');
+      let parsedData = JSON.parse(data);
+  
+      setTopGainers(parsedData.top_gainers);
+      setTopLosers(parsedData.bottom_losers);
+  
+      console.log(parsedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
 const loadStocks = async () => {
   try {
@@ -122,7 +136,8 @@ const loadStocks = async () => {
   if (error) return <div>Error loading data: {error}</div>;
 
   const handleNavigateToDetails = () => {
-    router.push(`/stock-details?symbol=${selectedClose+"("+selectedStock+")"}`);
+    // console.log(selectedStock)
+    router.push(`/stock-details?symbol=${selectedStock}&company=${selectedClose}`);
   };
     
   const handleName = (name)  => {
@@ -170,13 +185,15 @@ const loadStocks = async () => {
                 </tr>
               </thead>
               <tbody>
-                {topGainers?.map((stock) => (
+                {topGainers?.map((stock) => {
+                  if(stock["today_Change(%)"] )
+                  {return (
                   <tr key={stock.symbol}>
                     <td className="px-4 py-2 border-b">{handleName(stock.company_name)}</td>
-                    <td className="px-4 py-2 border-b">{stock.open.toFixed(3)}</td>
-                    <td className="px-4 py-2 border-b">{stock["today_Change(%)"].toFixed(3)}%</td>
+                    <td className="px-4 py-2 border-b">{stock.open?.toFixed(3)}</td>
+                    <td className="px-4 py-2 border-b">{stock["today_Change(%)"]?.toFixed(3)}%</td>
                   </tr>
-                ))}
+                )}})}
               </tbody>
             </table>
 
@@ -195,8 +212,8 @@ const loadStocks = async () => {
                   return(
                   <tr key={stock.symbol}>
                     <td className="px-4 py-2 border-b">{handleName(stock.company_name)}</td>
-                    <td className="px-4 py-2 border-b">{stock.open.toFixed(3)}</td>
-                    <td className="px-4 py-2 border-b">{stock["today_Change(%)"].toFixed(3)}%</td>
+                    <td className="px-4 py-2 border-b">{stock.open?.toFixed(3)}</td>
+                    <td className="px-4 py-2 border-b">{stock["today_Change(%)"]?.toFixed(3)}%</td>
                   </tr>
                 )})}
               </tbody>
