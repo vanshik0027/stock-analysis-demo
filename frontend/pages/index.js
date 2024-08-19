@@ -77,11 +77,11 @@ export default function LoginPage() {
       <div className="flex flex-grow items-center justify-center">
         <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <h3 className="text-xl font-medium text-center text-gray-600 dark:text-gray-200 mb-2">
-            {isRegistering ? "Create an Account" : "Welcome Back"}
+            {isRegistering ? "Create an Account" : "Welcome! Please Sign In to Explore More"}
           </h3>
 
           <p className="text-center text-gray-500 dark:text-gray-400 mt-1 mb-4">
-            {isRegistering ? "Register to create an account" : "Login to your account"}
+            {isRegistering ? "Register to create an account" : "Enter Your Credentials to Access Your Account"}
           </p>
 
           {error && (

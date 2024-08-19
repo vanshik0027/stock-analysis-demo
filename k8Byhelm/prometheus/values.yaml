@@ -769,13 +769,13 @@ serverFiles:
       - name: example
         rules:
           - alert: StockPriceChange
-            expr: abs(stock_price_change) > 3
+            expr: abs(stock_price_change) > 2
             for: 1m
             labels:
               severity: critical
             annotations:
               summary: "Stock price change alert"
-              description: "Stock price has changed by 3%"
+              description: "Stock price has changed by 2%"
 
       - name: server_alerts
         rules:

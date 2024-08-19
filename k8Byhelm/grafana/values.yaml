@@ -618,7 +618,7 @@ datasources:
    datasources:
    - name: Prometheus
      type: Prometheus
-     url: http://192.168.49.2:30090
+     url: http://192.168.49.2:30090/
      access: proxy
      isDefault: true
 #    - name: CloudWatch

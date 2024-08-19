@@ -1,31 +1,33 @@
-FROM python:3.9-slim
+# Build stage
+FROM python:3.9-alpine AS build
 
+# Install necessary build dependencies
+RUN apk add --no-cache \
+    gcc \
+    musl-dev \
+    python3-dev \
+    libffi-dev \
+    && python3 -m ensurepip
+
+# Set working directory
 WORKDIR /app
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libffi-dev \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy and install Python dependencies
-COPY requirements.txt /app/
+# Copy requirements and install dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
-COPY . /app
+# Runtime stage
+FROM python:3.9-alpine
 
+# Set working directory
+WORKDIR /app
+
+# Copy application files from the build stage
+COPY --from=build /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+COPY . .
+
+# Expose the application port
 EXPOSE 5000
 
-ENTRYPOINT ["python"]
-CMD ["app.py"]
-
-
-# FROM python:3.9
-# COPY . /app
-# WORKDIR /app
-# RUN pip install -r requirements.txt 
-# EXPOSE 5000 
-# ENTRYPOINT [ "python" ] 
-# CMD [ "app.py" ] 
+# Command to run the application
+CMD ["python", "app.py"]

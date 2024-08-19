@@ -5,6 +5,11 @@ Dockerfile
 .git
 .gitignore
 .env
-*.md
+.md
 tests/
 README.md
+.log
+.cache
+.tmp
+.swp
+.swo

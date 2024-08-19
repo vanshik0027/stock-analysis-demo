@@ -79,7 +79,7 @@ volumes:
 
 volumeMounts:
   - name: db-storage
-    mountPath: /var/lib/postgresql/data1
+    mountPath: /var/lib/postgresql/data
 
 nodeSelector: {}
 tolerations: []
