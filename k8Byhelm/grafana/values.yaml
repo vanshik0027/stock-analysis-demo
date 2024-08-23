@@ -854,7 +854,7 @@ smtp:
   enabled: true
   host: smtp.gmail.com:587
   user: vanshik0027@gmail.com
-  password: jjjjdykhxpchnqzwzywwww
+  password: #####################
   fromAddress: vanshik0027@gmail.com
   fromName: Grafana
 

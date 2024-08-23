@@ -38,25 +38,26 @@ ingress:
           pathType: ImplementationSpecific
   tls: []
 
-resources:
-  limits:
-    memory: "2Gi"
-    cpu: "2000m"
-  requests:
-    memory: "2Gi"
-    cpu: "1000m"
+resources: {}
+  # Uncomment and adjust the following if you need to specify resource limits and requests.
+  # limits:
+  #   cpu: "100m"
+  #   memory: "128Mi"
+  # requests:
+  #   cpu: "100m"
+  #   memory: "128Mi"
 
 readinessProbe:
   tcpSocket:
     port: 5432
-  initialDelaySeconds: 30
-  periodSeconds: 10
+  initialDelaySeconds: 10
+  periodSeconds: 5
 
 livenessProbe:
   tcpSocket:
     port: 5432
-  initialDelaySeconds: 60
-  periodSeconds: 20
+  initialDelaySeconds: 10
+  periodSeconds: 5
 
 autoscaling:
   enabled: false

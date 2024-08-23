@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: vanshik123docker/projectbackendflask
   pullPolicy: IfNotPresent
-  tag: "18"
+  tag: "19"
 # image:
 #   repository: vanshik123docker/optimizeimage
 #   pullPolicy: IfNotPresent
@@ -34,7 +34,7 @@ service:
   type: NodePort
   port: 5000
   targetPort: 5000
-  nodePort: 30000 # You can choose a port in the range 30000-32767
+  nodePort: 30000 
 
 ingress:
   enabled: false

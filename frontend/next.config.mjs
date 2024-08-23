@@ -2,5 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
 };
-
+// env
 export default nextConfig;
+// vior

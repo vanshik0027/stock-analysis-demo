@@ -19,7 +19,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Database connection setup
-database_url = os.getenv('DATABASE_URL')
+# database_url = os.getenv('DATABASE_URL')
 
 def try_connect(url):
     try:
@@ -31,7 +31,7 @@ def try_connect(url):
         print(f"Connection failed with {url}: {e}")
         return None
 
-engine = try_connect(database_url) or try_connect(db.conn_str)
+engine = try_connect(db.database_url) or try_connect(db.conn_str)
 
 # Prometheus setup
 registry = CollectorRegistry()
@@ -56,87 +56,6 @@ def get_all_stock_names():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Route to get stock changes by ticker
-# @app.route('/api/stocks/changes/<string:ticker>', methods=['GET'])
-# def get_closing_price(ticker):
-#     try:
-#         query = text("""
-#             SELECT * FROM stock_data
-#             WHERE symbol = :ticker OR company_name = :ticker
-#         """)
-#         with engine.connect() as connection:
-#             result = connection.execute(query, {'ticker': ticker}).fetchone()
-#             if not result:
-#                 return jsonify({'error': 'Ticker not found'}), 404
-
-#             columns = [col['name'] for col in inspect(engine).get_columns('stock_data')]
-#             result_dict = dict(zip(columns, result))
-
-#             today_date = datetime.now()
-#             one_month_back_date = today_date - timedelta(days=30)
-#             result_dict.update({
-#                 'Today_date': email.utils.formatdate(today_date.timestamp(), usegmt=True),
-#                 'One_month_back_date': email.utils.formatdate(one_month_back_date.timestamp(), usegmt=True)
-#             })
-
-#             return jsonify(result_dict)
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-
-# Route to get historical data by ticker
-# @app.route('/api/stocks/historical/<string:ticker>', methods=['GET'])
-# def get_historical(ticker):
-#     try:
-#         if not ticker.isalnum() or len(ticker) > 10:
-#             return jsonify({'error': 'Invalid ticker symbol'}), 400
-
-#         table_name = ticker.upper()
-#         query = text(f'SELECT "Date", "Open", "High", "Low", "Close", "Volume", "Dividends", "Stock Splits" FROM public."{table_name}"')
-
-#         with engine.connect() as connection:
-#             result = connection.execute(query)
-#             rows = result.fetchall()
-#             if not rows:
-#                 return jsonify({'error': 'Ticker not found'}), 404
-
-#             return jsonify([row_to_dict(row, result.keys()) for row in rows])
-#     except SQLAlchemyError as e:
-#         return jsonify({'error': 'Database error'}), 500
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-
-# Route to get current stock price by ticker
-# @app.route('/api/stocks/current/<string:ticker>', methods=['GET'])
-# def get_current_stock_price(ticker):
-#     try:
-#         if not ticker.isalnum() or len(ticker) > 10:
-#             return jsonify({'error': 'Invalid ticker symbol'}), 400
-
-#         stock_info = yf.Ticker(ticker).info
-#         price_keys = ['previousClose', 'open', 'currentPrice', 'regularMarketPrice']
-
-#         stock_prices = {key: stock_info.get(key, 'Not available') for key in price_keys}
-
-#         return jsonify({'ticker': ticker, 'prices': stock_prices})
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-
-# # Route to get top gainers and losers
-# @app.route('/api/stocks/top-gainers-losers', methods=['GET'])
-# def get_top_gainers_losers():
-#     try:
-#         queries = {
-#             'top_gainers': text('SELECT symbol, company_name, "today_Change(%)", open FROM public."stock_data" ORDER BY "today_Change(%)" DESC LIMIT 3'),
-#             'bottom_losers': text('SELECT symbol, company_name, "today_Change(%)", open FROM public."stock_data" ORDER BY "today_Change(%)" ASC LIMIT 3')
-#         }
-#         results = {}
-#         with engine.connect() as connection:
-#             for key, query in queries.items():
-#                 results[key] = [row_to_dict(row, ['symbol', 'company_name', 'today_Change(%)', 'open']) for row in connection.execute(query).fetchall()]
-
-#         return jsonify(results)
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
 
 def update_metrics():
     companies = []
@@ -185,70 +104,6 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(task_every_8_hours, 'interval', hours=8)
 scheduler.add_job(task_every_2_minutes, 'interval', minutes=2)
 scheduler.start()
-
-# Ensure scheduler shutdown on exit
-
-
-# from prometheus_client import Gauge, generate_latest, CollectorRegistry
-# from flask import Flask, jsonify, request, Response
-# from sqlalchemy import create_engine, text, inspect
-# from sqlalchemy.exc import SQLAlchemyError
-# import yfinance as yf
-# from apscheduler.schedulers.background import BackgroundScheduler
-# import threading
-# import atexit
-# from datetime import datetime, timedelta
-# import email.utils
-# import time
-# import psutil
-# from flask_cors import CORS
-# import os
-# from data_Ingestion import data, companies_Name, historical
-# import db_Connection as db
-
-# app = Flask(__name__)
-
-# database_url = os.getenv('DATABASE_URL')
-# def try_connect(url):
-#         try:
-#             engine = create_engine(url)
-#             with engine.connect() as connection:
-#                 print(f"Connection successful with {url}!")
-#             return engine
-#         except Exception as e:
-#             print(f"Connection failed with {url}: {e}")
-#             return None
-
-# # Trywefd the primary and backup connection stringss
-# engine = try_connect(database_url) or try_connect(db.conn_str)
-# # engine = create_engine(database_url)
-# # engine = create_engine(db.conn_str)
-
-# registry = CollectorRegistry()
-# price_change_gauge = Gauge('stock_price_change', 'Stock price percentage change', ['company_name', 'symbol'], registry=registry)
-# cpu_usage_gauge = Gauge('server_cpu_usage', 'CPU usage percentage', registry=registry)
-# memory_usage_gauge = Gauge('server_memory_usage', 'Memory usage percentage', registry=registry)
-
-# CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-# @app.route('/api/stocks', methods=['GET'])
-# def get_all_stock_names():
-#     try:
-#         query = text('SELECT * FROM public."companiesNames"')
-#         with engine.connect() as connection:
-#             result = connection.execute(query).fetchall()
-#             # print(result)
-        
-#         # Extract stock symbols and closing prices from the result
-#         stocks = [{'symbol': row[0], 'close': row[1]} for row in result]
-        
-#         if stocks:
-#             return jsonify({'stocks': stocks})
-#         else:
-#             return jsonify({'error': 'No stocks found'}), 404
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-
 
 @app.route('/api/stocks/changes/<string:ticker>', methods=['GET'])
 def get_closing_price(ticker):
@@ -409,23 +264,6 @@ def row_to_dict(row):
     """Converts a database row (tuple) to a dictionary."""
     return dict(zip(('symbol', 'company_name', 'today_Change(%)', 'open'), row))
 
-# def update_metrics():
-#     companies = []
-#     with engine.connect() as connection:
-#         query = text("""
-#             SELECT company_name, symbol, "today_Change(%)"
-#             FROM stock_data
-#         """)
-#         result = connection.execute(query)
-#         for row in result:
-#             company_name = row[0]
-#             symbol = row[1]
-#             today_change = row[2]
-#             if abs(today_change) != 0:
-#                 price_change_gauge.labels(company_name=company_name, symbol=symbol).set(today_change)
-#                 companies.append({'company_name': company_name, 'symbol': symbol, 'today_change': today_change})
-
-#     return jsonify(companies)
 
 
 # @app.route('/metrics')
@@ -470,8 +308,12 @@ def row_to_dict(row):
 atexit.register(lambda: scheduler.shutdown())
 
 if __name__ == '__main__':
-    data.update_stock_data()
-    companies_Name.update_companies()
-    historical.update_historical_data()
+    count=1
+    while count <2:
+        data.update_stock_data()
+        companies_Name.update_companies()
+        historical.update_historical_data()
+        count= count+1
     threading.Thread(target=update_server_metrics, daemon=True).start()
+        
     app.run(debug=True, host='0.0.0.0', port=5000)

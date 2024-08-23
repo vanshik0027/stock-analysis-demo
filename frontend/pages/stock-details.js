@@ -173,10 +173,10 @@ export default function StockDetails() {
           </div>
         </div>
       </div> */}
-<div className="w-[800px] p-2 mx-auto">
-  <h2 className="text-xl font-semibold mb-1">Yearly Data by Date</h2>
-  <Line data={dailyData} options={chartOptions} />
-</div>
+        <div className="w-[800px] p-2 mx-auto">
+          <h2 className="text-xl font-semibold mb-1">Yearly Data by Date</h2>
+          <Line data={dailyData} options={chartOptions} />
+        </div>
         <div className="flex flex-wrap justify-between mb-4">
           <div className="w-full sm:w-1/2 p-2">
             <h2 className="text-xl font-semibold mb-2">Yearly Data by Month</h2>

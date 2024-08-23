@@ -1,4 +1,6 @@
+#satge 1 biuld the Application
 FROM node:18-alpine AS base
+
 
 FROM base AS deps
 
@@ -9,10 +11,7 @@ COPY package.json ./
 
 RUN npm update && npm install
 
-# If you want yarn update and  install uncomment the bellow
-
-# RUN yarn install &&  yarn upgrade
-
+#stage 2 final production imgaes
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -20,6 +19,7 @@ COPY . .
 
 RUN npm run build
 
+# Stage 3: Prepare for  env fro devopmentr
 FROM base AS runner
 WORKDIR /app
 

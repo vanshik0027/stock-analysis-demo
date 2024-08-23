@@ -1,3 +1,5 @@
 {
   "extends": "next/core-web-vitals"
 }
+// This is the configuration file for ESLint,
+//  a static code analysis tool for identifying problematic patterns in JavaScript code

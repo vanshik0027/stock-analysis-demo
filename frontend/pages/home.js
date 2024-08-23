@@ -4,16 +4,16 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import Navbar from "./navbar";
 import axios from "axios";
 
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// // Register Chart.js components
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// );
 
 // Mock functions for fetching data (same as before)
 // Mock function to fetch stocks list
