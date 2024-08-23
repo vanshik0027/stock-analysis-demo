@@ -4,7 +4,7 @@ def test_smtp_connection():
     try:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
-        server.login('vanshik0027@gmail.com', 'jdykhxpchnqzwzyw')
+        server.login('vanshik0027@gmail.com', 'Your_App_Password')
         print("SMTP connection successful")
         server.quit()
     except Exception as e:
