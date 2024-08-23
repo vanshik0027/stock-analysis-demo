@@ -36,20 +36,14 @@ docker build -t frontend-image ./frontend
 ```
 
 **3. Deploy to Kubernetes:**
+run this command for the deployment 
 ```bash
-kubectl apply -f k8/backend/fileName.yaml
-kubectl apply -f k8/frontend/fileName.yaml
-kubectl apply -f k8/database/fileName.yaml
-```
-Use Helm to deploy the application:
-```bash
-helm install grafana package_name
-helm install prometheus package_name
+./deployAPP.ps1
 ```
 **4. Access the Application:**
 For access do forwarding of service. I did in minikube nod so, do by port-forward
 ```bash
-kubectl port-forward svc/serviceName 8080:8080
+kubectl port-forward svc/serviceName 8090:8090
 ```
 **4. Setup Configuration:**
 * check when the pods UP
